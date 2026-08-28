@@ -51,4 +51,6 @@ public interface RentalRepository extends JpaRepository<Rental, Long> {
                                    @Param("statuses") Collection<RentalStatus> statuses);
 
     boolean existsByItemIdAndStatusIn(Long itemId, Collection<RentalStatus> statuses);
+
+    boolean existsByItemId(Long itemId);
 }
