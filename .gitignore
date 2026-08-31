@@ -35,9 +35,3 @@ out/
 
 ### VS Code ###
 .vscode/
-
-src/main/resources/application.properties
-!src/main/resources/application-sample.properties
-
-### 업로드된 이미지 (로컬 디스크) ###
-upload/
