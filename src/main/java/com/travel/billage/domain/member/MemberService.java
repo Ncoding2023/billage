@@ -53,6 +53,22 @@ public class MemberService {
     }
 
     @Transactional
+    public void resetPassword(String email, String name, String newPassword, String confirmPassword) {
+        if (!newPassword.equals(confirmPassword)) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        Member member = memberRepository.findByEmailAndName(email, name)
+                .orElseThrow(() -> new IllegalArgumentException("이름 또는 이메일이 일치하지 않습니다."));
+
+        if (!member.isEnabled()) {
+            throw new IllegalStateException("정지된 계정입니다. 관리자에게 문의해주세요.");
+        }
+
+        member.changePassword(passwordEncoder.encode(newPassword));
+    }
+
+    @Transactional
     public void updateProfile(Long memberNo, String name, String nickname, String phone) {
         getMember(memberNo).updateProfile(name, nickname, phone);
     }

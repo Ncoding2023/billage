@@ -68,12 +68,20 @@ export function LoginPage() {
               {loading ? '로그인 중...' : '로그인'}
             </Button>
           </form>
-          <p className="mt-4 text-center text-sm text-muted-foreground">
-            계정이 없으신가요?{' '}
-            <Link to="/signup" className="text-primary underline underline-offset-4">
-              회원가입
-            </Link>
-          </p>
+          <div className="mt-4 flex flex-col gap-2 text-center text-sm text-muted-foreground">
+            <p>
+              비밀번호를 잊으셨나요?{' '}
+              <Link to="/reset-password" className="text-primary underline underline-offset-4">
+                비밀번호 찾기
+              </Link>
+            </p>
+            <p>
+              계정이 없으신가요?{' '}
+              <Link to="/signup" className="text-primary underline underline-offset-4">
+                회원가입
+              </Link>
+            </p>
+          </div>
         </CardContent>
       </Card>
     </div>
