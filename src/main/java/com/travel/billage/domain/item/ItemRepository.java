@@ -7,11 +7,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
-    List<Item> findByCategory(Category category);
+    List<Item> findAllByOrderByItemNoDesc();
+
+    List<Item> findByCategoryOrderByItemNoDesc(Category category);
 
     List<Item> findByMember(Member member);
 
-    List<Item> findByItemNameContaining(String keyword);
+    List<Item> findByItemNameContainingOrderByItemNoDesc(String keyword);
 
-    List<Item> findByCategoryAndItemNameContaining(Category category, String keyword);
+    List<Item> findByCategoryAndItemNameContainingOrderByItemNoDesc(Category category, String keyword);
 }

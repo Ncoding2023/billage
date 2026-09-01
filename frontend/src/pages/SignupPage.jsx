@@ -65,6 +65,9 @@ export function SignupPage() {
                 onChange={handleChange('email')}
                 required
               />
+              <p className="text-xs text-muted-foreground">
+                이메일(example@example.com) 형식에 맞게 입력해주세요.
+              </p>
             </div>
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="password">비밀번호</Label>
@@ -76,6 +79,9 @@ export function SignupPage() {
                 onChange={handleChange('password')}
                 required
               />
+              <p className="text-xs text-muted-foreground">
+                8자 이상, 특수문자(!@#$%^&* 등)를 포함해야 합니다.
+              </p>
             </div>
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="name">이름</Label>
@@ -104,6 +110,9 @@ export function SignupPage() {
                 onChange={handleChange('phone')}
                 required
               />
+              <p className="text-xs text-muted-foreground">
+                전화번호(010-0000-0000) 형식에 맞게 입력해주세요.
+              </p>
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}
             <Button type="submit" disabled={loading} className="w-full">

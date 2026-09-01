@@ -46,19 +46,19 @@ public class ItemService {
     }
 
     public List<Item> getAllItems() {
-        return itemRepository.findAll();
+        return itemRepository.findAllByOrderByItemNoDesc();
     }
 
     public List<Item> getItemsByCategory(Category category) {
-        return itemRepository.findByCategory(category);
+        return itemRepository.findByCategoryOrderByItemNoDesc(category);
     }
 
     public List<Item> searchItems(String keyword) {
-        return itemRepository.findByItemNameContaining(keyword);
+        return itemRepository.findByItemNameContainingOrderByItemNoDesc(keyword);
     }
 
     public List<Item> searchItemsByCategory(Category category, String keyword) {
-        return itemRepository.findByCategoryAndItemNameContaining(category, keyword);
+        return itemRepository.findByCategoryAndItemNameContainingOrderByItemNoDesc(category, keyword);
     }
 
     @Transactional
