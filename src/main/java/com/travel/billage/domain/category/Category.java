@@ -5,7 +5,7 @@ public enum Category {
     CLOTHES("의류"),
     CAMPING("캠핑용품"),
     LIVING("생활용품");
-
+    
     private final String description;
 
     Category(String description) {

@@ -12,63 +12,27 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { api } from '@/lib/api'
+import { getItemImageSrc } from '@/lib/categoryImages'
 import { CATEGORY_LABELS } from '@/lib/constants'
 
 const ALL_CATEGORIES = '__all__'
 const CATEGORY_ORDER = Object.keys(CATEGORY_LABELS)
-const CARD_SCROLL_OFFSET = 280
-
-function groupItemsByCategory(items, selectedCategory) {
-  const grouped = Object.fromEntries(CATEGORY_ORDER.map((key) => [key, []]))
-  for (const item of items) {
-    if (grouped[item.category]) {
-      grouped[item.category].push(item)
-    }
-  }
-
-  const keys =
-    selectedCategory === ALL_CATEGORIES
-      ? CATEGORY_ORDER
-      : CATEGORY_ORDER.filter((key) => key === selectedCategory)
-
-  return keys
-    .map((key) => ({
-      key,
-      label: CATEGORY_LABELS[key],
-      items: grouped[key] ?? [],
-    }))
-    .filter((row) => row.items.length > 0)
-}
+const PAGE_SIZE = 10
 
 export function ItemListPage() {
-  const [items, setItems] = useState([])
   const [category, setCategory] = useState(ALL_CATEGORIES)
   const [keyword, setKeyword] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(true)
+  const [debouncedKeyword, setDebouncedKeyword] = useState('')
 
   useEffect(() => {
-    setLoading(true)
-    const params = {}
-    if (category !== ALL_CATEGORIES) {
-      params.category = category
-    }
-    if (keyword.trim()) {
-      params.keyword = keyword.trim()
-    }
-
-    const timer = setTimeout(() => {
-      api
-        .get('/items', { params })
-        .then((res) => setItems(res.data))
-        .catch((err) => setError(err.response?.data?.message ?? '물품을 불러오지 못했습니다.'))
-        .finally(() => setLoading(false))
-    }, 300)
-
+    const timer = setTimeout(() => setDebouncedKeyword(keyword.trim()), 300)
     return () => clearTimeout(timer)
-  }, [category, keyword])
+  }, [keyword])
 
-  const categoryRows = groupItemsByCategory(items, category)
+  const showAll = category === ALL_CATEGORIES
+  const visibleCategories = showAll
+    ? CATEGORY_ORDER
+    : CATEGORY_ORDER.filter((key) => key === category)
 
   return (
     <div className="flex flex-col gap-8">
@@ -100,31 +64,118 @@ export function ItemListPage() {
         />
       </div>
 
-      {loading && <p className="text-muted-foreground">불러오는 중...</p>}
-      {!loading && error && <p className="text-destructive">{error}</p>}
-      {!loading && !error && categoryRows.length === 0 && (
-        <p className="text-muted-foreground">조건에 맞는 물품이 없습니다.</p>
-      )}
-
-      {!loading && !error && categoryRows.length > 0 && (
-        <div className="flex flex-col gap-8">
-          {categoryRows.map((row) => (
-            <CategoryCarouselRow key={row.key} label={row.label} items={row.items} />
-          ))}
-        </div>
-      )}
+      <div className="flex flex-col gap-8">
+        {visibleCategories.map((key) => (
+          <CategoryCarouselRow
+            key={`${key}-${debouncedKeyword}`}
+            categoryKey={key}
+            label={CATEGORY_LABELS[key]}
+            keyword={debouncedKeyword}
+            hideWhenEmpty={showAll}
+          />
+        ))}
+      </div>
     </div>
   )
 }
 
-function CategoryCarouselRow({ label, items }) {
+function CategoryCarouselRow({ categoryKey, label, keyword, hideWhenEmpty }) {
   const scrollerRef = useRef(null)
+  const cardRefs = useRef([])
+  const [page, setPage] = useState(0)
+  const [activeIndex, setActiveIndex] = useState(0)
+  const [items, setItems] = useState([])
+  const [totalPages, setTotalPages] = useState(0)
+  const [totalElements, setTotalElements] = useState(0)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
-  function scrollBy(direction) {
-    scrollerRef.current?.scrollBy({
-      left: direction * CARD_SCROLL_OFFSET,
+  useEffect(() => {
+    setLoading(true)
+    setError('')
+    const params = {
+      category: categoryKey,
+      page,
+      size: PAGE_SIZE,
+    }
+    if (keyword) {
+      params.keyword = keyword
+    }
+
+    let cancelled = false
+    api
+      .get('/items', { params })
+      .then((res) => {
+        if (cancelled) {
+          return
+        }
+        const content = res.data.content ?? []
+        setItems(content)
+        setTotalPages(res.data.totalPages ?? 0)
+        setTotalElements(res.data.totalElements ?? 0)
+        setActiveIndex(0)
+        requestAnimationFrame(() => {
+          scrollerRef.current?.scrollTo({ left: 0, behavior: 'smooth' })
+        })
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          setError(err.response?.data?.message ?? '물품을 불러오지 못했습니다.')
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setLoading(false)
+        }
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [categoryKey, keyword, page])
+
+  function scrollToIndex(index) {
+    setActiveIndex(index)
+    cardRefs.current[index]?.scrollIntoView({
       behavior: 'smooth',
+      inline: 'start',
+      block: 'nearest',
     })
+  }
+
+  function goPrevItem() {
+    if (loading || activeIndex <= 0) {
+      return
+    }
+    scrollToIndex(activeIndex - 1)
+  }
+
+  function goNextItem() {
+    if (loading || activeIndex >= items.length - 1) {
+      return
+    }
+    scrollToIndex(activeIndex + 1)
+  }
+
+  function goPrevPage() {
+    if (loading || page <= 0) {
+      return
+    }
+    setPage((prev) => prev - 1)
+  }
+
+  function goNextPage() {
+    if (loading || page >= totalPages - 1) {
+      return
+    }
+    setPage((prev) => prev + 1)
+  }
+
+  if (!loading && !error && totalElements === 0) {
+    if (hideWhenEmpty) {
+      return null
+    }
+    return <p className="text-muted-foreground">조건에 맞는 물품이 없습니다.</p>
   }
 
   return (
@@ -133,53 +184,103 @@ function CategoryCarouselRow({ label, items }) {
         <h2 className="text-lg font-semibold tracking-tight">
           {label}
           <span className="ml-2 text-sm font-normal text-muted-foreground">
-            {items.length}
+            {totalElements}
           </span>
         </h2>
-        <div className="flex gap-1">
-          <Button
-            type="button"
-            variant="outline"
-            size="icon-sm"
-            aria-label={`${label} 이전`}
-            onClick={() => scrollBy(-1)}
-          >
-            <ChevronLeft />
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            size="icon-sm"
-            aria-label={`${label} 다음`}
-            onClick={() => scrollBy(1)}
-          >
-            <ChevronRight />
-          </Button>
-        </div>
+        {totalPages > 1 && (
+          <div className="flex items-center gap-1">
+            <Button
+              type="button"
+              variant="outline"
+              size="icon-sm"
+              aria-label={`${label} 이전 페이지`}
+              disabled={page <= 0 || loading}
+              onClick={goPrevPage}
+            >
+              <ChevronLeft />
+            </Button>
+            <span className="min-w-14 text-center text-xs text-muted-foreground">
+              {page + 1} / {totalPages}
+            </span>
+            <Button
+              type="button"
+              variant="outline"
+              size="icon-sm"
+              aria-label={`${label} 다음 페이지`}
+              disabled={page >= totalPages - 1 || loading}
+              onClick={goNextPage}
+            >
+              <ChevronRight />
+            </Button>
+          </div>
+        )}
       </div>
 
-      <div
-        ref={scrollerRef}
-        className="-mx-1 flex gap-3 overflow-x-auto px-1 pb-2 scroll-smooth snap-x snap-mandatory [scrollbar-width:thin]"
-      >
-        {items.map((item) => (
-          <Link
-            key={item.itemNo}
-            to={`/items/${item.itemNo}`}
-            className="w-56 shrink-0 snap-start"
+      {loading && <p className="text-sm text-muted-foreground">불러오는 중...</p>}
+      {!loading && error && <p className="text-sm text-destructive">{error}</p>}
+
+      {!loading && !error && items.length > 0 && (
+        <div className="flex items-center gap-2">
+          {items.length > 1 && (
+            <Button
+              type="button"
+              variant="outline"
+              size="icon-sm"
+              aria-label={`${label} 이전 물품`}
+              disabled={activeIndex <= 0}
+              onClick={goPrevItem}
+              className="shrink-0 disabled:opacity-40"
+            >
+              <ChevronLeft />
+            </Button>
+          )}
+
+          <div
+            ref={scrollerRef}
+            className="flex min-w-0 flex-1 gap-3 overflow-x-auto pb-2 scroll-smooth snap-x snap-mandatory [scrollbar-width:thin]"
           >
-            <Card className="h-full transition-colors hover:bg-muted/50">
-              <CardHeader>
-                <CardTitle className="line-clamp-2">{item.itemName}</CardTitle>
-              </CardHeader>
-              <CardContent className="flex flex-col gap-1 text-sm text-muted-foreground">
-                <span>{item.rentalPoint.toLocaleString()}P / 대여</span>
-                <span>{item.ownerNickname}</span>
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
-      </div>
+            {items.map((item, index) => (
+              <Link
+                key={item.itemNo}
+                ref={(el) => {
+                  cardRefs.current[index] = el
+                }}
+                to={`/items/${item.itemNo}`}
+                className="w-56 shrink-0 snap-start"
+              >
+                <Card className="h-full overflow-hidden transition-colors hover:bg-muted/50">
+                  <img
+                    src={getItemImageSrc(item.category, item.mainImagePath)}
+                    alt={item.itemName}
+                    className="aspect-[4/3] w-full object-cover"
+                  />
+                  <CardHeader>
+                    <CardTitle className="line-clamp-2">{item.itemName}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex flex-col gap-1 text-sm text-muted-foreground">
+                    <span>{item.rentalPoint.toLocaleString()}P / 대여</span>
+                    <span>{item.ownerNickname}</span>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+
+          {items.length > 1 && (
+            <Button
+              type="button"
+              variant="outline"
+              size="icon-sm"
+              aria-label={`${label} 다음 물품`}
+              disabled={activeIndex >= items.length - 1}
+              onClick={goNextItem}
+              className="shrink-0 disabled:opacity-40"
+            >
+              <ChevronRight />
+            </Button>
+          )}
+        </div>
+      )}
     </section>
   )
 }

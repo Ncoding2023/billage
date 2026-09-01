@@ -13,8 +13,8 @@ export function AdminItemsTab() {
   function load() {
     setLoading(true)
     api
-      .get('/items')
-      .then((res) => setItems(res.data))
+      .get('/items', { params: { page: 0, size: 1000 } })
+      .then((res) => setItems(res.data.content ?? []))
       .catch((err) => setError(err.response?.data?.message ?? '물품 목록을 불러오지 못했습니다.'))
       .finally(() => setLoading(false))
   }

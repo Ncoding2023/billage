@@ -1,13 +1,15 @@
 package com.travel.billage.domain.item;
 
+import com.travel.billage.common.dto.PageResponse;
 import com.travel.billage.domain.category.Category;
 import com.travel.billage.domain.item.dto.ItemCreateRequest;
 import com.travel.billage.domain.item.dto.ItemResponse;
 import com.travel.billage.domain.item.dto.ItemUpdateRequest;
 import com.travel.billage.security.MemberDetails;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,6 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/items")
 @RequiredArgsConstructor
 public class ItemController {
+
+    private static final int DEFAULT_PAGE_SIZE = 10;
 
     private final ItemService itemService;
 
@@ -44,20 +48,13 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemResponse> getItems(@RequestParam(required = false) Category category,
-                                        @RequestParam(required = false) String keyword) {
-        List<Item> items;
-        boolean hasKeyword = keyword != null && !keyword.isBlank();
-        if (category != null && hasKeyword) {
-            items = itemService.searchItemsByCategory(category, keyword);
-        } else if (category != null) {
-            items = itemService.getItemsByCategory(category);
-        } else if (hasKeyword) {
-            items = itemService.searchItems(keyword);
-        } else {
-            items = itemService.getAllItems();
-        }
-        return items.stream().map(ItemResponse::from).toList();
+    public PageResponse<ItemResponse> getItems(@RequestParam(required = false) Category category,
+                                               @RequestParam(required = false) String keyword,
+                                               @RequestParam(defaultValue = "0") int page,
+                                               @RequestParam(defaultValue = "10") int size) {
+        int pageSize = size > 0 ? size : DEFAULT_PAGE_SIZE;
+        var pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "itemNo"));
+        return PageResponse.from(itemService.getItems(category, keyword, pageable).map(ItemResponse::from));
     }
 
     @PatchMapping("/{itemNo}")

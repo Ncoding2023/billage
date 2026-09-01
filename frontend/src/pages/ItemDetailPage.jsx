@@ -5,8 +5,9 @@ import { Card, CardContent } from '@/components/ui/card'
 import { ItemImageManager } from '@/components/ItemImageManager'
 import { KakaoMap } from '@/components/KakaoMap'
 import { cn } from '@/lib/utils'
-import { API_ORIGIN, api } from '@/lib/api'
+import { api } from '@/lib/api'
 import { useAuth } from '@/lib/auth'
+import { getItemImageSrc } from '@/lib/categoryImages'
 import { CATEGORY_LABELS, ITEM_STATUS_LABELS } from '@/lib/constants'
 
 export function ItemDetailPage() {
@@ -63,22 +64,17 @@ export function ItemDetailPage() {
 
   const isOwner = member?.memberNo === item.memberNo
   const mainImage = images.find((img) => img.mainImage) ?? images[0]
+  const imageSrc = getItemImageSrc(item.category, mainImage?.imagePath ?? item.mainImagePath)
 
   return (
     <div className="mx-auto max-w-2xl">
       <Card>
         <CardContent className="flex flex-col gap-4">
-          {mainImage ? (
-            <img
-              src={`${API_ORIGIN}${mainImage.imagePath}`}
-              alt={item.itemName}
-              className="aspect-video w-full rounded-lg object-cover"
-            />
-          ) : (
-            <div className="flex aspect-video w-full items-center justify-center rounded-lg bg-muted text-sm text-muted-foreground">
-              등록된 이미지가 없습니다
-            </div>
-          )}
+          <img
+            src={imageSrc}
+            alt={item.itemName}
+            className="aspect-video w-full rounded-lg object-cover"
+          />
 
           <div className="flex items-start justify-between">
             <div>

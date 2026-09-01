@@ -24,6 +24,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -85,6 +86,7 @@ public class Item {
     @OneToMany(mappedBy = "item")
     private List<Rental> rentals = new ArrayList<>();
 
+    @BatchSize(size = 50)
     @OneToMany(mappedBy = "item")
     private List<ItemImage> images = new ArrayList<>();
 

@@ -3,17 +3,17 @@ package com.travel.billage.domain.item;
 import com.travel.billage.domain.category.Category;
 import com.travel.billage.domain.member.Member;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
-    List<Item> findAllByOrderByItemNoDesc();
+    Page<Item> findByCategory(Category category, Pageable pageable);
 
-    List<Item> findByCategoryOrderByItemNoDesc(Category category);
+    Page<Item> findByItemNameContaining(String keyword, Pageable pageable);
+
+    Page<Item> findByCategoryAndItemNameContaining(Category category, String keyword, Pageable pageable);
 
     List<Item> findByMember(Member member);
-
-    List<Item> findByItemNameContainingOrderByItemNoDesc(String keyword);
-
-    List<Item> findByCategoryAndItemNameContainingOrderByItemNoDesc(Category category, String keyword);
 }
