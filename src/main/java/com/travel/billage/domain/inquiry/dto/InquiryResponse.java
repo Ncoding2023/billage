@@ -11,7 +11,8 @@ public record InquiryResponse(
         InquiryType inquiryType,
         String inquiryContent,
         LocalDateTime inquiryDate,
-        InquiryStatus processStatus
+        InquiryStatus processStatus,
+        String adminComment
 ) {
     public static InquiryResponse from(Inquiry inquiry) {
         return new InquiryResponse(
@@ -20,7 +21,8 @@ public record InquiryResponse(
                 inquiry.getInquiryType(),
                 inquiry.getInquiryContent(),
                 inquiry.getInquiryDate(),
-                inquiry.getProcessStatus()
+                inquiry.getProcessStatus(),
+                inquiry.getAdminComment()
         );
     }
 }

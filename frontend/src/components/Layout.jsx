@@ -30,12 +30,16 @@ export function Layout() {
                     관리자
                   </Link>
                 )}
-                <Link
-                  to="/inquiries/new"
-                  className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }))}
-                >
-                  문의하기
-                </Link>
+
+                {member.role !== 'ADMIN' && (
+                  <Link
+                    to="/inquiries/new"
+                    className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }))}
+                  >
+                    문의하기
+                  </Link>
+                )}
+
                 <Link
                   to="/items/new"
                   className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}

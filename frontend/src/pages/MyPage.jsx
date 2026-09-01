@@ -129,13 +129,17 @@ export function MyPage() {
         </TabsContent>
 
         <TabsContent value="inquiries" className="flex flex-col gap-2">
-          <Link
-            to="/inquiries/new"
-            className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'w-fit')}
-          >
-            새 문의 등록
-          </Link>
+          {member.role !== 'ADMIN' && (
+            <Link
+              to="/inquiries/new"
+              className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'w-fit')}
+            >
+              새 문의 등록
+            </Link>
+          )}
+
           {inquiries.length === 0 && <EmptyRow text="등록한 문의가 없습니다." />}
+
           {inquiries.map((inquiry) => (
             <Card key={inquiry.inquiryNo}>
               <CardContent className="flex items-center justify-between text-sm">
@@ -221,7 +225,12 @@ function ProfileCard({ pointBalance, onUpdated }) {
           <form onSubmit={handleSave} className="flex flex-col gap-3">
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="name">이름</Label>
-              <Input id="name" value={name} onChange={(e) => setName(e.target.value)} required />
+              <Input
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
             </div>
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="nickname">닉네임</Label>

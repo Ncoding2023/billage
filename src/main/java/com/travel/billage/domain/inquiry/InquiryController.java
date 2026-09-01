@@ -29,7 +29,7 @@ public class InquiryController {
 
     @PostMapping
     public ResponseEntity<InquiryResponse> createInquiry(@AuthenticationPrincipal MemberDetails principal,
-                                                           @Valid @RequestBody InquiryCreateRequest request) {
+                                                         @Valid @RequestBody InquiryCreateRequest request) {
         Inquiry inquiry = inquiryService.createInquiry(
                 principal.getMemberNo(), request.inquiryType(), request.inquiryContent());
         return ResponseEntity.status(HttpStatus.CREATED).body(InquiryResponse.from(inquiry));
@@ -53,8 +53,12 @@ public class InquiryController {
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{inquiryNo}/status")
     public ResponseEntity<Void> changeProcessStatus(@PathVariable Long inquiryNo,
-                                                      @Valid @RequestBody InquiryStatusUpdateRequest request) {
-        inquiryService.changeProcessStatus(inquiryNo, request.processStatus());
+                                                    @Valid @RequestBody InquiryStatusUpdateRequest request) {
+        inquiryService.changeProcessStatus(
+                inquiryNo,
+                request.processStatus(),
+                request.adminComment()
+        );
         return ResponseEntity.noContent().build();
     }
 }
