@@ -41,16 +41,16 @@ export function Layout() {
                 )}
 
                 <Link
-                  to="/items/new"
-                  className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}
-                >
-                  물품 등록
-                </Link>
-                <Link
                   to="/mypage"
                   className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }))}
                 >
                   {member.nickname}님
+                </Link>
+                <Link
+                  to="/items/new"
+                  className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}
+                >
+                  물품 등록
                 </Link>
                 <Button variant="outline" size="sm" onClick={handleLogout}>
                   로그아웃
