@@ -1,9 +1,11 @@
 package com.travel.billage.domain.item.dto;
 
 import com.travel.billage.domain.category.Category;
+import com.travel.billage.domain.image.ItemImage;
 import com.travel.billage.domain.item.Item;
 import com.travel.billage.domain.item.ItemStatus;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record ItemResponse(
         Long itemNo,
@@ -19,6 +21,7 @@ public record ItemResponse(
         Double latitude,
         Double longitude,
         ItemStatus itemStatus,
+        String mainImagePath,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
@@ -37,8 +40,20 @@ public record ItemResponse(
                 item.getLatitude(),
                 item.getLongitude(),
                 item.getItemStatus(),
+                resolveMainImagePath(item.getImages()),
                 item.getCreatedAt(),
                 item.getUpdatedAt()
         );
+    }
+
+    private static String resolveMainImagePath(List<ItemImage> images) {
+        if (images == null || images.isEmpty()) {
+            return null;
+        }
+        return images.stream()
+                .filter(ItemImage::isMainImage)
+                .map(ItemImage::getImagePath)
+                .findFirst()
+                .orElse(images.get(0).getImagePath());
     }
 }

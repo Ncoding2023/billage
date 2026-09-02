@@ -12,6 +12,7 @@ import { LoginPage } from '@/pages/LoginPage'
 import { MyPage } from '@/pages/MyPage'
 import { RentalDetailPage } from '@/pages/RentalDetailPage'
 import { RentalRequestPage } from '@/pages/RentalRequestPage'
+import { ResetPasswordPage } from '@/pages/ResetPasswordPage'
 import { SignupPage } from '@/pages/SignupPage'
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/" element={<ItemListPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/items/:itemNo" element={<ItemDetailPage />} />
         <Route
           path="/items/new"

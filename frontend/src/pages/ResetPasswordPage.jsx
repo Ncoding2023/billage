@@ -10,18 +10,16 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { useAuth } from '@/lib/auth'
+import { api } from '@/lib/api'
 
 const initialForm = {
-  email: '',
-  password: '',
   name: '',
-  nickname: '',
-  phone: '',
+  email: '',
+  newPassword: '',
+  confirmPassword: '',
 }
 
-export function SignupPage() {
-  const { signUp } = useAuth()
+export function ResetPasswordPage() {
   const navigate = useNavigate()
   const [form, setForm] = useState(initialForm)
   const [error, setError] = useState('')
@@ -34,12 +32,18 @@ export function SignupPage() {
   async function handleSubmit(e) {
     e.preventDefault()
     setError('')
+
+    if (form.newPassword !== form.confirmPassword) {
+      setError('비밀번호가 일치하지 않습니다.')
+      return
+    }
+
     setLoading(true)
     try {
-      await signUp(form)
-      navigate('/login')
+      await api.post('/auth/reset-password', form)
+      navigate('/login', { replace: true })
     } catch (err) {
-      setError(err.response?.data?.message ?? '회원가입에 실패했습니다.')
+      setError(err.response?.data?.message ?? '비밀번호 변경에 실패했습니다.')
     } finally {
       setLoading(false)
     }
@@ -49,40 +53,13 @@ export function SignupPage() {
     <div className="mx-auto max-w-sm">
       <Card>
         <CardHeader>
-          <CardTitle>회원가입</CardTitle>
+          <CardTitle>비밀번호 찾기</CardTitle>
           <CardDescription>
-            가입 즉시 5,000포인트가 지급됩니다.
+            가입 시 이름과 이메일을 확인한 뒤 새 비밀번호로 변경합니다.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="email">이메일</Label>
-              <Input
-                id="email"
-                type="email"
-                value={form.email}
-                onChange={handleChange('email')}
-                required
-              />
-              <p className="text-xs text-muted-foreground">
-                이메일(example@example.com) 형식에 맞게 입력해주세요.
-              </p>
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="password">비밀번호</Label>
-              <Input
-                id="password"
-                type="password"
-                minLength={8}
-                value={form.password}
-                onChange={handleChange('password')}
-                required
-              />
-              <p className="text-xs text-muted-foreground">
-                8자 이상, 특수문자(!@#$%^&* 등)를 포함해야 합니다.
-              </p>
-            </div>
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="name">이름</Label>
               <Input
@@ -93,36 +70,48 @@ export function SignupPage() {
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="nickname">닉네임</Label>
+              <Label htmlFor="email">이메일</Label>
               <Input
-                id="nickname"
-                value={form.nickname}
-                onChange={handleChange('nickname')}
+                id="email"
+                type="email"
+                value={form.email}
+                onChange={handleChange('email')}
                 required
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="phone">전화번호</Label>
+              <Label htmlFor="newPassword">변경할 비밀번호</Label>
               <Input
-                id="phone"
-                placeholder="010-0000-0000"
-                value={form.phone}
-                onChange={handleChange('phone')}
+                id="newPassword"
+                type="password"
+                minLength={8}
+                value={form.newPassword}
+                onChange={handleChange('newPassword')}
                 required
               />
               <p className="text-xs text-muted-foreground">
-                전화번호(010-0000-0000) 형식에 맞게 입력해주세요.
+                8자 이상, 특수문자(!@#$%^&* 등)를 포함해야 합니다.
               </p>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="confirmPassword">변경할 비밀번호 확인</Label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                minLength={8}
+                value={form.confirmPassword}
+                onChange={handleChange('confirmPassword')}
+                required
+              />
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}
             <Button type="submit" disabled={loading} className="w-full">
-              {loading ? '가입 중...' : '회원가입'}
+              {loading ? '변경 중...' : '비밀번호 변경'}
             </Button>
           </form>
           <p className="mt-4 text-center text-sm text-muted-foreground">
-            이미 계정이 있으신가요?{' '}
             <Link to="/login" className="text-primary underline underline-offset-4">
-              로그인
+              로그인으로 돌아가기
             </Link>
           </p>
         </CardContent>

@@ -12,6 +12,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -23,13 +24,19 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import jakarta.persistence.EntityListeners;
 
 @Entity
-@Table(name = "TB_ITEM")
+@Table(
+        name = "TB_ITEM",
+        indexes = {
+                @Index(name = "IDX_ITEM_CATEGORY_ITEM_NO", columnList = "category, item_no")
+        }
+)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
@@ -79,6 +86,7 @@ public class Item {
     @OneToMany(mappedBy = "item")
     private List<Rental> rentals = new ArrayList<>();
 
+    @BatchSize(size = 50)
     @OneToMany(mappedBy = "item")
     private List<ItemImage> images = new ArrayList<>();
 

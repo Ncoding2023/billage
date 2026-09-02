@@ -4,8 +4,9 @@ import com.travel.billage.domain.category.Category;
 import com.travel.billage.domain.member.Member;
 import com.travel.billage.domain.member.MemberRepository;
 import com.travel.billage.domain.rental.RentalRepository;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,20 +46,18 @@ public class ItemService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 물품입니다."));
     }
 
-    public List<Item> getAllItems() {
-        return itemRepository.findAll();
-    }
-
-    public List<Item> getItemsByCategory(Category category) {
-        return itemRepository.findByCategory(category);
-    }
-
-    public List<Item> searchItems(String keyword) {
-        return itemRepository.findByItemNameContaining(keyword);
-    }
-
-    public List<Item> searchItemsByCategory(Category category, String keyword) {
-        return itemRepository.findByCategoryAndItemNameContaining(category, keyword);
+    public Page<Item> getItems(Category category, String keyword, Pageable pageable) {
+        boolean hasKeyword = keyword != null && !keyword.isBlank();
+        if (category != null && hasKeyword) {
+            return itemRepository.findByCategoryAndItemNameContaining(category, keyword, pageable);
+        }
+        if (category != null) {
+            return itemRepository.findByCategory(category, pageable);
+        }
+        if (hasKeyword) {
+            return itemRepository.findByItemNameContaining(keyword, pageable);
+        }
+        return itemRepository.findAll(pageable);
     }
 
     @Transactional
