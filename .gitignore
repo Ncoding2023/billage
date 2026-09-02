@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+docs/
+src/test/java/com/travel/billage/domain
+application.properties
+!application.properties.example
