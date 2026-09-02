@@ -39,9 +39,9 @@ public class InquiryService {
     }
 
     @Transactional
-    public void changeProcessStatus(Long inquiryNo, InquiryStatus processStatus) {
+    public void changeProcessStatus(Long inquiryNo, InquiryStatus processStatus, String adminComment) {
         Inquiry inquiry = inquiryRepository.findById(inquiryNo)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 문의입니다."));
-        inquiry.changeProcessStatus(processStatus);
+        inquiry.changeProcessStatus(processStatus, adminComment);
     }
 }

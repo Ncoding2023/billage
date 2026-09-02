@@ -52,6 +52,9 @@ public class Inquiry {
     @Column(name = "process_status", nullable = false, length = 20)
     private InquiryStatus processStatus;
 
+    @Column(name = "admin_comment", length = 1000)
+    private String adminComment;
+
     @Builder
     public Inquiry(Member member, InquiryType inquiryType, String inquiryContent) {
         this.member = member;
@@ -60,7 +63,8 @@ public class Inquiry {
         this.processStatus = InquiryStatus.RECEIVED;
     }
 
-    public void changeProcessStatus(InquiryStatus processStatus) {
+    public void changeProcessStatus(InquiryStatus processStatus, String adminComment) {
         this.processStatus = processStatus;
+        this.adminComment = adminComment;
     }
 }

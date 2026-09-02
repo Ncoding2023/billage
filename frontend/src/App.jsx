@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom'
 import { Layout } from '@/components/Layout'
 import { RequireAdmin } from '@/components/RequireAdmin'
 import { RequireAuth } from '@/components/RequireAuth'
+import { RequireUser } from '@/components/RequireUser'
 import { AdminPage } from '@/pages/AdminPage'
 import { InquiryCreatePage } from '@/pages/InquiryCreatePage'
 import { ItemCreatePage } from '@/pages/ItemCreatePage'
@@ -67,9 +68,9 @@ function App() {
         <Route
           path="/inquiries/new"
           element={
-            <RequireAuth>
+            <RequireUser>
               <InquiryCreatePage />
-            </RequireAuth>
+            </RequireUser>
           }
         />
         <Route
