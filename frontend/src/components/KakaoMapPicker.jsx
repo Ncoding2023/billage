@@ -41,7 +41,7 @@ export function KakaoMapPicker({ latitude, longitude, onChange }) {
     return (
       <div className="flex h-48 w-full flex-col items-center justify-center gap-1 rounded-lg bg-muted p-4 text-center text-sm text-muted-foreground">
         <p>{error}</p>
-        <p className="text-xs">아래 위도/경도 입력란에 직접 값을 입력해주세요.</p>
+        <p className="text-xs">잠시 후 다시 시도해주세요.</p>
       </div>
     )
   }

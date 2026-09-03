@@ -41,6 +41,11 @@ export function ItemForm({ initial, onSubmit, submitLabel }) {
       return
     }
 
+    if (!form.latitude || !form.longitude) {
+      setError('지도에서 거래 장소를 선택해주세요.')
+      return
+    }
+
     setLoading(true)
     try {
       await onSubmit({
@@ -135,7 +140,7 @@ export function ItemForm({ initial, onSubmit, submitLabel }) {
             />
           </div>
           <div className="flex flex-col gap-1.5">
-            <Label>지도에서 위치 선택 (선택)</Label>
+            <Label>지도에서 위치 선택</Label>
             <KakaoMapPicker
               latitude={form.latitude}
               longitude={form.longitude}
@@ -144,32 +149,8 @@ export function ItemForm({ initial, onSubmit, submitLabel }) {
               }
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="latitude">위도</Label>
-              <Input
-                id="latitude"
-                type="number"
-                step="any"
-                placeholder="37.5665"
-                value={form.latitude}
-                onChange={handleChange('latitude')}
-                required
-              />
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="longitude">경도</Label>
-              <Input
-                id="longitude"
-                type="number"
-                step="any"
-                placeholder="126.9780"
-                value={form.longitude}
-                onChange={handleChange('longitude')}
-                required
-              />
-            </div>
-          </div>
+          <input type="hidden" id="latitude" value={form.latitude} readOnly />
+          <input type="hidden" id="longitude" value={form.longitude} readOnly />
         </div>
       </div>
 
