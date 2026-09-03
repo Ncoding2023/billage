@@ -30,20 +30,17 @@
 
 ## 프로젝트 구조
 
-```text
-billage
-├── frontend/             # React 프론트엔드
-│   └── src/
-│       ├── pages/        # 화면
-│       ├── components/   # UI·공통 컴포넌트
-│       └── lib/          # api, auth, constants
-├── src/main/java/com/travel/billage/
-│   ├── domain/           # member, item, rental, point, inquiry …
-│   ├── security/         # JWT·SecurityConfig
-│   └── config/           # 관리자 시드 등
-└── src/main/resources/
-    └── application.properties
-```
+### 1. 프론트 엔드
+
+![프론트 구조](./images/frontend.png)
+
+### 2. 백 엔드
+
+![백 구조](./images/bakend.png)
+
+### 3. 테스트 케이스
+
+![테스트 구조](./images/testcase.png)
 
 ---
 
