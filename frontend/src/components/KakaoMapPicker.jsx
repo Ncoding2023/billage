@@ -21,11 +21,19 @@ export function KakaoMapPicker({ latitude, longitude, onChange }) {
         const center = new kakao.maps.LatLng(initialLat, initialLng)
         const map = new kakao.maps.Map(containerRef.current, { center, level: 4 })
         const marker = new kakao.maps.Marker({ map, position: center });
+        const geocoder = new kakao.maps.services.Geocoder()
 
         kakao.maps.event.addListener(map, 'click', (mouseEvent) => {
           const latLng = mouseEvent.latLng
           marker.setPosition(latLng)
-          onChange(latLng.getLat(), latLng.getLng())
+
+          geocoder.coord2Address(latLng.getLng(), latLng.getLat(), (result, status) => {
+            const roadAddress =
+              status === kakao.maps.services.Status.OK
+                ? result[0]?.road_address?.address_name ?? ''
+                : ''
+            onChange(latLng.getLat(), latLng.getLng(), roadAddress)
+          })
         })
       })
       .catch((err) => setError(err.message))
