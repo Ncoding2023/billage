@@ -22,7 +22,7 @@
 | 구분 | 기술 |
 |------|------|
 | Backend | Java 17, Spring Boot 4, Spring Data JPA, Spring Security, JWT |
-| Frontend | React 19, Vite, React Router, Tailwind CSS, Axios |
+| Frontend | React 19, Vite, React Router, Tailwind CSS, shadcn/ui, Axios |
 | Database | Oracle Database |
 | Build | Gradle, npm |
 
@@ -252,3 +252,56 @@ git push
 
 ---
 
+## 프로젝트 소개
+
+주요 화면을 간단히 소개합니다.
+
+### 홈 · 물품 목록
+
+카테고리별 가로 목록과 검색으로 대여 가능한 물품을 둘러볼 수 있습니다.
+
+![홈 물품 목록](images/screenshot/01_홈_물품목록.jpg)
+
+물품이 등록된 상태의 홈 화면입니다. 썸네일·포인트·카테고리 단위로 확인할 수 있습니다.
+
+![홈 물품 목록 (등록 예시)](images/screenshot/01_홈_물품목록_물품up.png)
+
+### 로그인 · 회원가입
+
+JWT 기반 로그인과 회원가입을 지원합니다. 가입 시 포인트가 지급됩니다.
+
+![로그인](images/screenshot/02_로그인.jpg)
+
+![회원가입](images/screenshot/03_회원가입.jpg)
+
+### 마이페이지 · 포인트
+
+프로필 수정, 내 물품·대여·문의 내역과 포인트 잔액·내역을 확인할 수 있습니다.
+
+![마이페이지 포인트 내역](images/screenshot/07_마이페이지_포인트내역.jpg)
+
+### 물품 등록
+
+물품 정보와 대여 포인트를 입력하고, 카카오맵으로 거래 장소를 지정할 수 있습니다.
+
+![물품 등록](images/screenshot/08_물품등록.jpg)
+
+![물품 등록 - 지도 선택](images/screenshot/08_물품등록_지도선택.jpg)
+
+### 문의 · 신고
+
+문의/신고 유형을 선택해 내용을 등록하고, 마이페이지에서 처리 상태를 확인할 수 있습니다.
+
+![문의·신고 등록](images/screenshot/12_문의신고등록_입력.jpg)
+
+### 대여 신청
+
+물품 상세에서 대여 기간을 입력해 신청합니다. 포인트로 대여가 진행됩니다.
+
+![대여 신청](images/screenshot/15_대여신청_입력.jpg)
+
+### 관리자
+
+관리자는 회원·물품·대여·문의 등을 한곳에서 관리할 수 있습니다.
+
+![관리자 문의 관리](images/screenshot/27_관리자_문의관리.jpg)

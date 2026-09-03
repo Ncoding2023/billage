@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Billage — 프로젝트 발표</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/deck.css" />
+</head>
+<body>
+  <div class="deck" id="deck">
+
+    <!-- 0. 표지 -->
+    <section class="slide active" data-section="intro">
+      <p class="kicker">Team Presentation</p>
+      <p class="brand">Billage</p>
+      <p class="lead">지역 기반 물품 대여 플랫폼 — 쓰지 않는 물건을 포인트로 나누고, 필요할 때 빌려 쓰는 서비스입니다.</p>
+      <div class="flow" style="margin-top:1.4rem">
+        <span class="pill">회원 · 인증 · 포인트</span>
+        <span class="pill">물품 · 지도</span>
+        <span class="pill">대여 · 반납 · 문의 · 관리자</span>
+      </div>
+    </section>
+
+    <!-- 1. 목차 -->
+    <section class="slide" data-section="intro">
+      <p class="kicker">Agenda</p>
+      <h2>발표 구성 · 3인 분할</h2>
+      <p>한 파일에서 이어가며 발표합니다. 숫자 키로 담당 섹션에 바로 점프할 수 있습니다.</p>
+      <ul class="agenda" style="margin-top:0.8rem">
+        <li><span class="who">공통 · 1</span> 프로젝트 목적 · 기술 스택 · 구조</li>
+        <li><span class="who">발표 A · 2</span> 회원 / 로그인 / 마이페이지 / 포인트</li>
+        <li><span class="who">발표 B · 3</span> 물품 등록 · 상세 · 카카오맵</li>
+        <li><span class="who">발표 C · 4</span> 대여 · 반납 · 문의/신고 · 관리자</li>
+      </ul>
+    </section>
+
+    <!-- 2. 목적 -->
+    <section class="slide" data-section="intro">
+      <p class="kicker">Why Billage</p>
+      <h2>프로젝트 목적</h2>
+      <div class="grid-2">
+        <div>
+          <p class="lead">한두 번 쓰고 방치되는 생활용품·공구·캠핑용품을, 동네 단위로 대여할 수 있게 합니다.</p>
+          <ul style="margin-top:1rem">
+            <li>현금 결제 대신 <strong style="color:var(--ink)">포인트 원장</strong>으로 거래</li>
+            <li>카카오맵으로 <strong style="color:var(--ink)">거래 장소</strong> 지정</li>
+            <li>신청 → 수락 → 반납까지 <strong style="color:var(--ink)">상태 기반</strong> 관리</li>
+            <li>문의/신고와 관리자 모니터링으로 운영 보완</li>
+          </ul>
+        </div>
+        <div>
+          <img class="shot" src="assets/screenshot/01_홈_물품목록_물품up.png" alt="홈 물품 목록" />
+          <p class="caption">홈 · 카테고리별 물품 목록</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. 주요 기능 -->
+    <section class="slide" data-section="intro">
+      <p class="kicker">Overview</p>
+      <h2>주요 기능 한눈에</h2>
+      <div class="cards" style="margin-top:0.4rem">
+        <div class="card"><strong>인증</strong><p>회원가입, 로그인, 비밀번호 찾기 (JWT)</p></div>
+        <div class="card"><strong>물품</strong><p>등록·수정·삭제, 카테고리/검색, 지도 장소</p></div>
+        <div class="card"><strong>대여</strong><p>신청·수락·취소·반납, 포인트 차감/지급</p></div>
+        <div class="card"><strong>운영</strong><p>마이페이지, 문의/신고, 관리자 콘솔</p></div>
+      </div>
+    </section>
+
+    <!-- 4. 스택 -->
+    <section class="slide" data-section="intro">
+      <p class="kicker">Stack</p>
+      <h2>기술 스택</h2>
+      <div class="grid-3" style="margin-top:0.6rem">
+        <div class="card"><strong>Backend</strong><p>Java 17<br />Spring Boot 4<br />JPA · Security · JWT</p></div>
+        <div class="card"><strong>Frontend</strong><p>React 19 · Vite<br />React Router · Axios<br />Tailwind · shadcn/ui</p></div>
+        <div class="card"><strong>Infra</strong><p>Oracle Database<br />Gradle · npm<br />카카오맵 API</p></div>
+      </div>
+      <div class="card" style="margin-top:0.2rem">
+        <strong>shadcn/ui</strong>
+        <p>복사해 쓰는 React UI 컴포넌트 모음입니다. Tailwind 스타일 위에 Button·Card·Select 같은 공통 UI를 빠르게 맞추고, 프로젝트 코드로 직접 커스터마이즈할 수 있습니다.</p>
+      </div>
+    </section>
+
+    <!-- 5. 구조 -->
+    <section class="slide divider-slide" data-section="intro">
+      <p class="kicker">Architecture</p>
+      <h2>프로젝트 구조</h2>
+      <p>프론트·백엔드 패키지 구조와 테스트 구성을 짧게 공유합니다.</p>
+      <span class="tag">공통 발표</span>
+    </section>
+
+    <section class="slide" data-section="intro">
+      <p class="kicker">Frontend</p>
+      <h2>프론트엔드 구조</h2>
+      <img class="shot shot-lg" src="assets/frontend.png" alt="프론트엔드 구조" />
+    </section>
+
+    <section class="slide" data-section="intro">
+      <p class="kicker">Backend</p>
+      <h2>백엔드 구조</h2>
+      <img class="shot shot-lg" src="assets/bakend.png" alt="백엔드 구조" />
+    </section>
+
+    <section class="slide" data-section="intro">
+      <p class="kicker">Domain</p>
+      <h2>도메인 · 대여 상태</h2>
+      <div class="grid-2">
+        <div>
+          <h3>핵심 엔티티</h3>
+          <ul style="margin-top:0.6rem">
+            <li>Member · PointHistory</li>
+            <li>Item · ItemImage</li>
+            <li>Rental · ItemReturn</li>
+            <li>Inquiry</li>
+          </ul>
+          <p class="caption" style="margin-top:1rem">포인트 잔액은 회원 컬럼이 아니라 원장 합산으로 계산합니다.</p>
+        </div>
+        <div>
+          <h3>대여 상태 흐름</h3>
+          <div class="flow">
+            <span class="pill">REQUESTED</span><span class="arrow">→</span>
+            <span class="pill">RENTING</span><span class="arrow">→</span>
+            <span class="pill">RETURN_PENDING</span><span class="arrow">→</span>
+            <span class="pill">RETURN_COMPLETED</span>
+          </div>
+          <p class="caption" style="margin-top:0.8rem">REQUESTED 단계에서만 취소 가능 · 취소 시 포인트 환불</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 발표 A ===== -->
+    <section class="slide divider-slide" data-section="member">
+      <p class="kicker">Part A</p>
+      <h2>회원 · 인증 · 마이페이지 · 포인트</h2>
+      <p>가입부터 JWT 로그인, 프로필/포인트 원장까지 — 화면을 따라가며 설명합니다.</p>
+      <span class="tag">담당: 발표 A</span>
+    </section>
+
+    <section class="slide" data-section="member">
+      <p class="kicker">Auth</p>
+      <h2>로그인 · 회원가입</h2>
+      <div class="shot-pair">
+        <div>
+          <img class="shot" src="assets/screenshot/02_로그인.jpg" alt="로그인" />
+          <p class="caption">로그인 — JWT 발급</p>
+        </div>
+        <div>
+          <img class="shot" src="assets/screenshot/03_회원가입_입력.jpg" alt="회원가입" />
+          <p class="caption">회원가입 — 가입 시 5,000P 지급</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-section="member">
+      <p class="kicker">Auth</p>
+      <h2>유효성 검사 · 비밀번호 찾기</h2>
+      <div class="shot-pair">
+        <div>
+          <img class="shot" src="assets/screenshot/03_회원가입_유효성검사.jpg" alt="유효성 검사" />
+          <p class="caption">중복 닉네임 등 검증 메시지</p>
+        </div>
+        <div>
+          <img class="shot" src="assets/screenshot/04_비밀번호찾기.jpg" alt="비밀번호 찾기" />
+          <p class="caption">이름·이메일 확인 후 비밀번호 재설정</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-section="member">
+      <p class="kicker">My Page</p>
+      <h2>마이페이지 · 포인트 원장</h2>
+      <div class="shot-pair">
+        <div>
+          <img class="shot" src="assets/screenshot/06_마이페이지.jpg" alt="마이페이지" />
+          <p class="caption">프로필 · 보유 포인트</p>
+        </div>
+        <div>
+          <img class="shot" src="assets/screenshot/07_마이페이지_포인트내역.jpg" alt="포인트 내역" />
+          <p class="caption">SIGNUP_BONUS 등 원장 내역</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-section="member">
+      <p class="kicker">Talking points</p>
+      <h2>이 파트에서 강조할 점</h2>
+      <ul>
+        <li>Stateless JWT (`Authorization: Bearer`)</li>
+        <li>비밀번호 암호화 · 8자 이상 + 특수문자</li>
+        <li>포인트 잔액 = `TB_POINT_HISTORY` 합계 (잔액 컬럼 없음)</li>
+        <li>가입 보너스 `SIGNUP_BONUS` (+5,000)</li>
+        <li>마이페이지에서 내 물품 · 대여 · 문의 진입</li>
+      </ul>
+    </section>
+
+    <!-- ===== 발표 B ===== -->
+    <section class="slide divider-slide" data-section="item">
+      <p class="kicker">Part B</p>
+      <h2>물품 등록 · 상세 · 지도</h2>
+      <p>카테고리별 물품과 거래 장소(카카오맵)를 중심으로 설명합니다.</p>
+      <span class="tag">담당: 발표 B</span>
+    </section>
+
+    <section class="slide" data-section="item">
+      <p class="kicker">Item</p>
+      <h2>물품 등록 · 지도 선택</h2>
+      <div class="shot-pair">
+        <div>
+          <img class="shot" src="assets/screenshot/08_물품등록.jpg" alt="물품 등록" />
+          <p class="caption">카테고리 · 대여 포인트 · 설명</p>
+        </div>
+        <div>
+          <img class="shot" src="assets/screenshot/08_물품등록_지도선택.jpg" alt="지도 선택" />
+          <p class="caption">카카오맵으로 거래 좌표 지정</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-section="item">
+      <p class="kicker">Item</p>
+      <h2>상세 · 소유자 / 타인 시점</h2>
+      <div class="shot-pair">
+        <div>
+          <img class="shot" src="assets/screenshot/10_물품상세_소유자관리.jpg" alt="소유자 관리" />
+          <p class="caption">소유자 — 이미지·수정·삭제</p>
+        </div>
+        <div>
+          <img class="shot" src="assets/screenshot/09_물품상세_타인시점.jpg" alt="타인 시점" />
+          <p class="caption">타인 — 대여 신청 버튼</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-section="item">
+      <p class="kicker">Item</p>
+      <h2>물품 수정 · 내 물품</h2>
+      <div class="shot-pair">
+        <div>
+          <img class="shot" src="assets/screenshot/11_물품수정.jpg" alt="물품 수정" />
+          <p class="caption">기존 값 프리필 수정 폼</p>
+        </div>
+        <div>
+          <img class="shot" src="assets/screenshot/13_마이페이지_내물품.jpg" alt="내 물품" />
+          <p class="caption">마이페이지 · 내 물품 탭</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 발표 C ===== -->
+    <section class="slide divider-slide" data-section="rental">
+      <p class="kicker">Part C</p>
+      <h2>대여 · 반납 · 문의 · 관리자</h2>
+      <p>대여 라이프사이클과 문의/관리자 운영 화면을 이어서 설명합니다.</p>
+      <span class="tag">담당: 발표 C</span>
+    </section>
+
+    <section class="slide" data-section="rental">
+      <p class="kicker">Rental</p>
+      <h2>대여 신청</h2>
+      <div class="shot-pair">
+        <div>
+          <img class="shot" src="assets/screenshot/15_대여신청_입력.jpg" alt="대여 신청" />
+          <p class="caption">기간 입력 후 신청 · 포인트 차감</p>
+        </div>
+        <div>
+          <img class="shot" src="assets/screenshot/16_대여상세_신청자.jpg" alt="신청자 상세" />
+          <p class="caption">신청자 시점 — 상태: 대여신청</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-section="rental">
+      <p class="kicker">Rental</p>
+      <h2>제공자 수락 · 마이페이지</h2>
+      <div class="shot-pair">
+        <div>
+          <img class="shot" src="assets/screenshot/16_대여상세_제공자_수락전.jpg" alt="제공자 수락 전" />
+          <p class="caption">제공자 — 대여 시작 확인</p>
+        </div>
+        <div>
+          <img class="shot" src="assets/screenshot/19_마이페이지_받은대여요청.jpg" alt="받은 대여요청" />
+          <p class="caption">받은 대여요청 목록</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-section="rental">
+      <p class="kicker">Return</p>
+      <h2>대여중 → 반납 → 완료</h2>
+      <div class="shot-pair">
+        <div>
+          <img class="shot" src="assets/screenshot/20_대여상세_대여중.jpg" alt="대여중" />
+          <p class="caption">RENTING — 반납 신청</p>
+        </div>
+        <div>
+          <img class="shot" src="assets/screenshot/22_대여상세_반납확인_입력.jpg" alt="반납 확인" />
+          <p class="caption">제공자 반납 확인 (정상/파손/분실)</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-section="rental">
+      <p class="kicker">Return</p>
+      <h2>반납 완료 · 포인트 정리</h2>
+      <div class="grid-2">
+        <div>
+          <img class="shot" src="assets/screenshot/23_대여상세_반납완료.jpg" alt="반납 완료" />
+          <p class="caption">RETURN_COMPLETED — 라이프사이클 종료</p>
+        </div>
+        <div>
+          <h3>포인트 처리</h3>
+          <ul style="margin-top:0.7rem">
+            <li>신청 시 신청자 `RENTAL_PAYMENT` 차감</li>
+            <li>제공자 `RENTAL_INCOME` 지급</li>
+            <li>REQUESTED 취소 시 `RENTAL_REFUND`</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide divider-slide" data-section="admin">
+      <p class="kicker">Part C · continued</p>
+      <h2>문의 · 신고 · 관리자</h2>
+      <p>사용자 문의 등록과 관리자 운영 화면을 짧게 시연합니다.</p>
+      <span class="tag">담당: 발표 C</span>
+    </section>
+
+    <section class="slide" data-section="admin">
+      <p class="kicker">Inquiry</p>
+      <h2>문의 / 신고</h2>
+      <div class="shot-pair">
+        <div>
+          <img class="shot" src="assets/screenshot/12_문의신고등록_입력.jpg" alt="문의 등록" />
+          <p class="caption">유형 선택 · 내용 등록</p>
+        </div>
+        <div>
+          <img class="shot" src="assets/screenshot/14_마이페이지_문의내역.jpg" alt="문의 내역" />
+          <p class="caption">마이페이지에서 처리 상태 확인</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-section="admin">
+      <p class="kicker">Admin</p>
+      <h2>관리자 · 회원 / 대여</h2>
+      <div class="shot-pair">
+        <div>
+          <img class="shot" src="assets/screenshot/24_관리자_회원관리.jpg" alt="회원 관리" />
+          <p class="caption">회원 · 권한 · 정지/활성화</p>
+        </div>
+        <div>
+          <img class="shot" src="assets/screenshot/25_관리자_대여현황.jpg" alt="대여 현황" />
+          <p class="caption">전체 대여 상태 모니터링</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-section="admin">
+      <p class="kicker">Admin</p>
+      <h2>관리자 · 물품 / 문의</h2>
+      <div class="shot-pair">
+        <div>
+          <img class="shot" src="assets/screenshot/26_관리자_물품관리.jpg" alt="물품 관리" />
+          <p class="caption">물품 상태 · 삭제</p>
+        </div>
+        <div>
+          <img class="shot" src="assets/screenshot/27_관리자_문의관리.jpg" alt="문의 관리" />
+          <p class="caption">코멘트 · 처리중/완료</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-section="intro">
+      <p class="kicker">Quality</p>
+      <h2>테스트 구성</h2>
+      <img class="shot shot-lg" src="assets/testcase.png" alt="테스트 케이스" />
+    </section>
+
+    <section class="slide" data-section="intro">
+      <p class="kicker">Closing</p>
+      <h2>정리 · Q&amp;A</h2>
+      <ul>
+        <li>Billage = 지역 기반 · 포인트 기반 물품 대여</li>
+        <li>JWT 인증 + 원장형 포인트 + 상태 기반 대여</li>
+        <li>카카오맵 거래 장소 · 문의/관리자 운영</li>
+      </ul>
+      <p class="lead" style="margin-top:1.4rem">이상입니다. 감사합니다.</p>
+      <p class="brand" style="font-size:2.4rem;margin-top:1rem">Billage</p>
+    </section>
+  </div>
+
+  <div class="hud">
+    <div class="progress" id="progress"></div>
+    <div>
+      <strong id="sectionLabel">공통</strong>
+      <span id="pageLabel">1 / 1</span>
+      <span class="hint"> · ← → / Space · F 전체화면 · 1공통 2회원 3물품 4대여 5문의/관리</span>
+    </div>
+    <div class="hud-actions">
+      <button type="button" id="prevBtn">이전</button>
+      <button type="button" id="nextBtn">다음</button>
+    </div>
+  </div>
+
+  <script>
+    window.DECK = {
+      sectionNames: {
+        intro: "공통 · 소개",
+        member: "A · 회원/포인트",
+        item: "B · 물품",
+        rental: "C · 대여/반납",
+        admin: "C · 문의/관리자",
+      },
+      sectionKeys: ["intro", "member", "item", "rental", "admin"],
+    };
+  </script>
+  <script src="js/deck.js"></script>
+</body>
+</html>
