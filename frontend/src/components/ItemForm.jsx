@@ -144,8 +144,13 @@ export function ItemForm({ initial, onSubmit, submitLabel }) {
             <KakaoMapPicker
               latitude={form.latitude}
               longitude={form.longitude}
-              onChange={(lat, lng) =>
-                setForm((prev) => ({ ...prev, latitude: String(lat), longitude: String(lng) }))
+              onChange={(lat, lng, roadAddress) =>
+                setForm((prev) => ({
+                  ...prev,
+                  latitude: String(lat),
+                  longitude: String(lng),
+                  rentalPlace: roadAddress || prev.rentalPlace,
+                }))
               }
             />
           </div>
