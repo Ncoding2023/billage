@@ -21,11 +21,19 @@ export function KakaoMapPicker({ latitude, longitude, onChange }) {
         const center = new kakao.maps.LatLng(initialLat, initialLng)
         const map = new kakao.maps.Map(containerRef.current, { center, level: 4 })
         const marker = new kakao.maps.Marker({ map, position: center });
+        const geocoder = new kakao.maps.services.Geocoder()
 
         kakao.maps.event.addListener(map, 'click', (mouseEvent) => {
           const latLng = mouseEvent.latLng
           marker.setPosition(latLng)
-          onChange(latLng.getLat(), latLng.getLng())
+
+          geocoder.coord2Address(latLng.getLng(), latLng.getLat(), (result, status) => {
+            const roadAddress =
+              status === kakao.maps.services.Status.OK
+                ? result[0]?.road_address?.address_name ?? ''
+                : ''
+            onChange(latLng.getLat(), latLng.getLng(), roadAddress)
+          })
         })
       })
       .catch((err) => setError(err.message))
@@ -41,7 +49,7 @@ export function KakaoMapPicker({ latitude, longitude, onChange }) {
     return (
       <div className="flex h-48 w-full flex-col items-center justify-center gap-1 rounded-lg bg-muted p-4 text-center text-sm text-muted-foreground">
         <p>{error}</p>
-        <p className="text-xs">아래 위도/경도 입력란에 직접 값을 입력해주세요.</p>
+        <p className="text-xs">잠시 후 다시 시도해주세요.</p>
       </div>
     )
   }
