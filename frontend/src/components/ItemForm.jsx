@@ -67,7 +67,9 @@ export function ItemForm({ initial, onSubmit, submitLabel }) {
         <Label htmlFor="category">카테고리</Label>
         <Select value={category} onValueChange={setCategory}>
           <SelectTrigger id="category" className="w-full">
-            <SelectValue placeholder="카테고리를 선택하세요" />
+            <SelectValue placeholder="카테고리를 선택하세요">
+              {(value) => CATEGORY_LABELS[value] ?? value}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             {Object.entries(CATEGORY_LABELS).map(([value, label]) => (
